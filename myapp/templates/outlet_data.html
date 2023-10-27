@@ -6,7 +6,14 @@
 </head>
 <body>
 
+
+<form method="post" action="{% url 'myapp:common_section' data_section=data_section %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Filter Data</button>
+</form>
 <!-- inlet_data.html -->
+{% if data %}
 
 {% block content %}
     <!-- Content for the Inlet section -->
@@ -35,6 +42,7 @@
     </table>
 {% endblock %}
 
+{% endif %}
 
 </body>
 </html>

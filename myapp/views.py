@@ -1,39 +1,44 @@
-# # app_name/views.py
-from django.shortcuts import render
-from .models import BatteryData
-from .models import Pump, Inflow, Outflow
-# from .models import PumpData, InletData, OutletData
-
-
-def battery_view(request):
-    data = BatteryData.objects.all()
-    return render(request, 'battery.html', {'data': data})
-
-#
-# # views.py
-# from django.shortcuts import render
-# from .models import PumpData, InletData, OutletData
-#
-# def pump_data(request):
-#     data = PumpData.objects.all()
-#     return render(request, 'pump_data.html', {'data': data})
-#
-# def inlet_data(request):
-#     data = InletData.objects.all()
-#     return render(request, 'inlet_data.html', {'data': data})
-#
-# def outlet_data(request):
-#     data = OutletData.objects.all()
-#     return render(request, 'outlet_data.html', {'data': data})
-
 # views.py
+from django.shortcuts import render
+from .models import Pump, Inflow, Outflow
+from .forms import DataFilterForm
 
 def common_section(request, data_section):
-    if data_section == 'pump':
-        data = Pump.objects.all()
-    elif data_section == 'inlet':
-        data = Inflow.objects.all()
-    elif data_section == 'outlet':
-        data = Outflow.objects.all()
+    data = None
+    form = DataFilterForm(request.POST or None)  # Initialize the form with POST data or None
 
-    return render(request, 'section.html', {'data': data, 'data_section': data_section})
+    if form.is_valid():
+        start_date = form.cleaned_data.get('start_date')
+        end_date = form.cleaned_data.get('end_date')
+        start_iteration = form.cleaned_data.get('start_iteration')
+        end_iteration = form.cleaned_data.get('end_iteration')
+
+        # Prepare filters based on the provided values
+        filters = {}
+
+        # if start_date:
+        #     filters['datetime__gte'] = start_date
+        # if end_date:
+        #     filters['datetime__lte'] = end_date
+        if start_iteration:
+            filters['iteration__gte'] = start_iteration
+        if end_iteration:
+            filters['iteration__lte'] = end_iteration
+
+        # Apply filters to the data
+        if data_section == 'pump':
+            data = Pump.objects.filter(**filters)
+        elif data_section == 'inlet':
+            data = Inflow.objects.filter(**filters)
+        elif data_section == 'outlet':
+            data = Outflow.objects.filter(**filters)
+    else:
+        # No form submission or form is not valid, so display all data
+        if data_section == 'pump':
+            data = Pump.objects.all()
+        elif data_section == 'inlet':
+            data = Inflow.objects.all()
+        elif data_section == 'outlet':
+            data = Outflow.objects.all()
+
+    return render(request, 'section.html', {'data': data, 'data_section': data_section, 'form': form})
