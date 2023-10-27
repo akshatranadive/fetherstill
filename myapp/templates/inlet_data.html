@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inlet data</title>
+</head>
+<body>
+
+<!-- inlet_data.html -->
+
+{% block content %}
+    <!-- Content for the Inlet section -->
+    <h2>Inlet Data</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Iterations</th>
+                <th scope="col">CPU Time</th>
+                <th scope="col">Travels</th>
+                <th scope="col">Value</th>
+                <!-- Add other columns specific to Inlet data as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td>{{ item.iteration }}</td>
+                <td>{{ item.cputime }}</td>
+                <td>{{ item.travels }}</td>
+                <td>{{ item.value }}</td>
+                <!-- Display other fields specific to Inlet data as needed -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+
+</body>
+</html>

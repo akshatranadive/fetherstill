@@ -1,31 +1,3 @@
-<!-- app_name/templates/battery_data.html
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Battery Data</title>
-</head>
-<body>
-    <h1>Battery Data</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Battery Number</th>
-                <th>Temperature</th>
-                <th>Voltage</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in data %}
-                <tr>
-                    <td>{{ item.battery_number }}</td>
-                    <td>{{ item.temperature }}</td>
-                    <td>{{ item.voltage }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html> -->
 
 {% load static %}
 
@@ -62,37 +34,24 @@ href = "{%  static 'myapp/css/bootstrap.css' %}">
                 <tr>
                     <th scope="col">Battery ID</th>
                     <th scope="col">Temperature</th>
-                    <th scope="col">Pressure</th>
+{#                    <th scope="col">Pressure</th>#}
                     <th scope="col">Timestamp</th>
                 </tr>
             </thead>
             <tbody>
-{#                {% for item in data %}#}
-{#                <tr>#}
-{#                    <td>{{ item.battery_id }}</td>#}
-{#                    <td>{{ item.temperature }}</td>#}
-{#                    <td>{{ item.pressure }}</td>#}
-{#                    <td>{{ item.timestamp }}</td>#}
-{#                </tr>#}
-{#                {% endfor %}#}
-            <tr>
-                    <td>Id example</td>
-                    <td>Id example</td>
-                    <td>Id example</td>
-                    <td>Id example</td>
+                {% for item in data %}
+                <tr>
+                    <td>{{ item.battery_number }}</td>
+                    <td>{{ item.temperature }}</td>
+                    <td>{{ item.voltage }}</td>
                 </tr>
-            <tr>
-                    <td>Id example</td>
-                    <td>Id example</td>
-                    <td>Id example</td>
-                    <td>Id example</td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
 
     <!-- Bootstrap 5 and jQuery Scripts -->
-{#    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>#}
-{#    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>#}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

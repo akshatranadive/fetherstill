@@ -1,0 +1,13 @@
+<!-- section.html -->
+{% extends "base.html" %}
+
+{% block content %}
+    <!-- Include content based on the selected section -->
+    {% if data_section == 'inlet' %}
+        {% include "inlet_data.html" %}
+    {% elif data_section == 'outlet' %}
+        {% include "outlet_data.html" %}
+    {% elif data_section == 'pump' %}
+        {% include "pump_data.html" %}
+    {% endif %}
+{% endblock %}

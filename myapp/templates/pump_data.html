@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pump data</title>
+</head>
+<body>
+
+<!-- inlet_data.html -->
+
+{% block content %}
+    <!-- Content for the Inlet section -->
+    <h2>Pump Data</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Watt</th>
+                <th scope="col">Voltage</th>
+                <th scope="col">Ampere</th>
+                <th scope="col">Flow</th>
+                <th scope="col">Rate/sec</th>
+                <th scope="col">Temperature</th>
+                <th scope="col">Datetime</th>
+                <!-- Add other columns specific to Inlet data as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+            <tr>
+                <td>{{ item.w }}</td>
+                <td>{{ item.v }}</td>
+                <td>{{ item.a }}</td>
+                <td>{{ item.flow_l_min }}</td>
+                <td>{{ item.r_sec }}</td>
+                <td>{{ item.temp_field }}</td>
+                <td>{{ item.datetime }}</td>
+                <!-- Display other fields specific to Inlet data as needed -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+
+</body>
+</html>
