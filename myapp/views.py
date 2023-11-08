@@ -1,4 +1,3 @@
-# views.py
 from django.shortcuts import render
 from .models import Pump, Inflow, Outflow
 from .forms import DataFilterForm
@@ -6,6 +5,14 @@ from .forms import DataFilterForm
 def common_section(request, data_section):
     data = None
     form = DataFilterForm(request.POST or None)  # Initialize the form with POST data or None
+
+    # Sorting logic
+    sort_by = request.GET.get('sort_by', 'iteration')  # Default to 'iteration' if no column is specified
+    sort_order = request.GET.get('sort_order', 'asc')  # Sort order: 'asc' or 'desc'
+
+    order_field = sort_by
+    if sort_order == 'desc':
+        order_field = '-' + order_field
 
     if form.is_valid():
         start_date = form.cleaned_data.get('start_date')
@@ -15,11 +22,6 @@ def common_section(request, data_section):
 
         # Prepare filters based on the provided values
         filters = {}
-
-        # if start_date:
-        #     filters['datetime__gte'] = start_date
-        # if end_date:
-        #     filters['datetime__lte'] = end_date
         if start_iteration:
             filters['iteration__gte'] = start_iteration
         if end_iteration:
@@ -27,18 +29,18 @@ def common_section(request, data_section):
 
         # Apply filters to the data
         if data_section == 'pump':
-            data = Pump.objects.filter(**filters)
+            data = Pump.objects.filter(**filters).order_by(order_field)
         elif data_section == 'inlet':
-            data = Inflow.objects.filter(**filters)
+            data = Inflow.objects.filter(**filters).order_by(order_field)
         elif data_section == 'outlet':
-            data = Outflow.objects.filter(**filters)
+            data = Outflow.objects.filter(**filters).order_by(order_field)
     else:
         # No form submission or form is not valid, so display all data
         if data_section == 'pump':
-            data = Pump.objects.all()
+            data = Pump.objects.all().order_by(order_field)
         elif data_section == 'inlet':
-            data = Inflow.objects.all()
+            data = Inflow.objects.all().order_by(order_field)
         elif data_section == 'outlet':
-            data = Outflow.objects.all()
+            data = Outflow.objects.all().order_by(order_field)
 
     return render(request, 'section.html', {'data': data, 'data_section': data_section, 'form': form})
