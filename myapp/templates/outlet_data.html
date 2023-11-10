@@ -1,3 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Inlet data</title>
+    <style>
+        .form-row:first-child .form-group:nth-child(3) {
+            margin-left: 200px;
+        }
+        .form-row:nth-child(2) .form-group:nth-child(3) {
+            margin-left: 200px;
+        }
+    </style>
+</head>
+<body>
 
 {#<form method="post" action="{% url 'myapp:common_section' data_section=data_section %}">#}
 {#    {% csrf_token %}#}
@@ -17,9 +32,6 @@
             {{ iteration_form.max_iteration.label_tag }}
             {{ iteration_form.max_iteration }}
         </div>
-    </div>
-
-    <div class="form-row">
         <div class="form-group col-md-2">
             {{ cpu_time_form.min_cputime.label_tag }}
             {{ cpu_time_form.min_cputime }}
@@ -39,9 +51,6 @@
             {{ travels_form.max_travels.label_tag }}
             {{ travels_form.max_travels }}
         </div>
-    </div>
-
-    <div class="form-row">
         <div class="form-group col-md-2">
             {{ value_form.min_value.label_tag }}
             {{ value_form.min_value }}
@@ -58,9 +67,18 @@
 <!-- inlet_data.html -->
 {% if data %}
 
+<div class="export-dropdown">
+    <button id="exportButton" type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Export <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="exportButton">
+        <li><a href="{% url 'myapp:csv_export' data_section=data_section %}?export_format=csv">CSV</a></li>
+        <li><a href="{% url 'myapp:excel_export' data_section=data_section %}?export_format=excel">Excel</a></li>
+        <li><a href="{% url 'myapp:json_export' data_section=data_section %}?export_format=json">JSON</a></li>
+    </ul>
+</div>
 
 {% block content %}
-    <a href="{% url 'myapp:csv_export' data_section=data %}" class="btn btn-primary">Export to CSV</a>
     <!-- Content for the Inlet section -->
     <h2>Outlet Data</h2>
     <table class="table">
@@ -112,3 +130,6 @@
 {% endblock %}
 
 {% endif %}
+
+</body>
+</html>

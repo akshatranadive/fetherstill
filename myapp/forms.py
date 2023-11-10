@@ -17,9 +17,19 @@ class CpuTimeFilterForm(forms.Form):
 class TravelsFilterForm(forms.Form):
     min_travels = forms.DecimalField(label="Min travels", required=False)
     max_travels = forms.DecimalField(label="Max travels", required=False)
-
-
 class ValueFilterForm(forms.Form):
     min_value = forms.DecimalField(label="Min value", required=False)
     max_value = forms.DecimalField(label="Max value", required=False)
+class WattsFilterForm(forms.Form):
+    min_w = forms.DecimalField(label="Min value", required=False)
+    max_w = forms.DecimalField(label="Max value", required=False)
+class VoltsFilterForm(forms.Form):
+    min_v = forms.DecimalField(label="Min value", required=False)
+    max_v = forms.DecimalField(label="Max value", required=False)
+class AmperesFilterForm(forms.Form):
+    min_a = forms.DecimalField(label="Min value", required=False)
+    max_a = forms.DecimalField(label="Max value", required=False)
+class TempFilterForm(forms.Form):
+    min_temp = forms.DecimalField(label="Min value", required=False)
+    max_temp = forms.DecimalField(label="Max value", required=False)
 

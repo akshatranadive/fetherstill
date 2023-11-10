@@ -3,6 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Inlet data</title>
+    <style>
+        .form-row:first-child .form-group:nth-child(3) {
+            margin-left: 200px;
+        }
+        .form-row:nth-child(2) .form-group:nth-child(3) {
+            margin-left: 200px;
+        }
+    </style>
 </head>
 <body>
 
@@ -16,9 +24,6 @@
             {{ iteration_form.max_iteration.label_tag }}
             {{ iteration_form.max_iteration }}
         </div>
-    </div>
-
-    <div class="form-row">
         <div class="form-group col-md-2">
             {{ cpu_time_form.min_cputime.label_tag }}
             {{ cpu_time_form.min_cputime }}
@@ -38,9 +43,6 @@
             {{ travels_form.max_travels.label_tag }}
             {{ travels_form.max_travels }}
         </div>
-    </div>
-
-    <div class="form-row">
         <div class="form-group col-md-2">
             {{ value_form.min_value.label_tag }}
             {{ value_form.min_value }}
@@ -64,9 +66,16 @@
 <!-- inlet_data.html -->
 {% if data %}
 
-    <a href="{% url 'myapp:csv_export' data_section=data %}" class="btn btn-primary">Export to CSV</a>
-
-    <button id="exportButton" type="button" class="btn btn-successs">Export to CSV</button>
+<div class="export-dropdown">
+    <button id="exportButton" type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Export <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="exportButton">
+        <li><a href="{% url 'myapp:csv_export' data_section=data_section %}?export_format=csv">CSV</a></li>
+        <li><a href="{% url 'myapp:excel_export' data_section=data_section %}?export_format=excel">Excel</a></li>
+        <li><a href="{% url 'myapp:json_export' data_section=data_section %}?export_format=json">JSON</a></li>
+    </ul>
+</div>
 
 {% block content %}
     <!-- Content for the Inlet section -->
@@ -120,39 +129,6 @@
 {% endblock %}
 
 {% endif %}
-<script>
-    document.querySelector("#exportButton").addEventListener("click", function() {
-        // Fetch the CSV data from the server
-        fetch("{% url 'myapp:csv_export' data_section=data %}")
-            .then(response => response.blob())
-            .then(data => {
-                // Create a blob from the data
-                const csv = "iteration, CPU Time, Travels, Value\n" + data.map(row => row.join(", ")).join("\n");
-
-                // Create a blob from the CSV data
-                const blob = new Blob([csv], { type: "text/csv" });
-
-                // Create a URL for the blob
-                const url = URL.createObjectURL(blob);
-
-                // Create an anchor element for the user to download the file
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = "exported_data.csv";
-
-                // Simulate a click on the anchor element to trigger the download prompt
-                a.click();
-
-                // Release the object URL
-                URL.revokeObjectURL(url);
-
-            });
-    });
-</script>
-
-
-
-
 
 </body>
 </html>
