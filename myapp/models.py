@@ -32,7 +32,7 @@ class Outflow(models.Model):
     batteryid = models.BigIntegerField(db_column='batteryID', blank=True, null=True)  # Field name made lowercase.
 
     def __str__(self):
-        return self.battery_number
+        return 'name'
 
 # class Outflow(models.Model):
 #     iteration = models.BigIntegerField(db_column='Iteration', blank=True, null=True)  # Field name made lowercase.
@@ -117,7 +117,7 @@ class Inflow(models.Model):
     batteryid = models.BigIntegerField(db_column='batteryID', blank=True, null=True)  # Field name made lowercase.
 
     def __str__(self):
-        return self.iteration
+        return 'name'
 class Pump(models.Model):
     w = models.FloatField(db_column='W', blank=True, null=True)  # Field name made lowercase.
     v = models.FloatField(db_column='V', blank=True, null=True)  # Field name made lowercase.

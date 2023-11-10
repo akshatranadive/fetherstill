@@ -6,14 +6,67 @@
 </head>
 <body>
 
-<form method="post" action="{% url 'myapp:common_section' data_section=data_section %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Filter Data</button>
+<form method="get" action="{% url 'myapp:common_section' data_section=data_section %}" novalidate>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            {{ iteration_form.min_iteration.label_tag }}
+            {{ iteration_form.min_iteration }}
+        </div>
+        <div class="form-group col-md-2">
+            {{ iteration_form.max_iteration.label_tag }}
+            {{ iteration_form.max_iteration }}
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            {{ cpu_time_form.min_cputime.label_tag }}
+            {{ cpu_time_form.min_cputime }}
+        </div>
+        <div class="form-group col-md-2">
+            {{ cpu_time_form.max_cputime.label_tag }}
+            {{ cpu_time_form.max_cputime }}
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            {{ travels_form.min_travels.label_tag }}
+            {{ travels_form.min_travels }}
+        </div>
+        <div class="form-group col-md-2">
+            {{ travels_form.max_travels.label_tag }}
+            {{ travels_form.max_travels }}
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            {{ value_form.min_value.label_tag }}
+            {{ value_form.min_value }}
+        </div>
+        <div class="form-group col-md-2">
+            {{ value_form.max_value.label_tag }}
+            {{ value_form.max_value }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Apply Filters</button>
 </form>
+
+
+{#<form method="post" action="{% url 'myapp:common_section' data_section=data_section %}">#}
+{#    {% csrf_token %}#}
+{#    {{ form.as_table }}#}
+{#    <button type="submit">Filter Data</button>#}
+{#</form>#}
 
 <!-- inlet_data.html -->
 {% if data %}
+
+    <a href="{% url 'myapp:csv_export' data_section=data %}" class="btn btn-primary">Export to CSV</a>
+
+    <button id="exportButton" type="button" class="btn btn-successs">Export to CSV</button>
 
 {% block content %}
     <!-- Content for the Inlet section -->
@@ -21,11 +74,35 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">Iterations</th>
-                <th scope="col">CPU Time</th>
-                <th scope="col">Travels</th>
-                <th scope="col">Value</th>
-                <!-- Add other columns specific to Inlet data as needed -->
+                <th>
+                    {% if request.GET.sort_order == "asc" %}
+                        <a href="?sort_by=iteration&sort_order=desc">Iterations ↓</a>
+                    {% else %}
+                        <a href="?sort_by=iteration&sort_order=asc">Iterations ↑</a>
+                    {% endif %}
+                </th>
+                <!-- Add similar blocks for other columns -->
+                <th>
+                    {% if request.GET.sort_order == "asc" %}
+                        <a href="?sort_by=cputime&sort_order=desc">CPU Time ↓</a>
+                    {% else %}
+                        <a href="?sort_by=cputime&sort_order=asc">CPU Time ↑</a>
+                    {% endif %}
+                </th>
+                <th>
+                    {% if request.GET.sort_order == "asc" %}
+                        <a href="?sort_by=travels&sort_order=desc">Travels ↓</a>
+                    {% else %}
+                        <a href="?sort_by=travels&sort_order=asc">Travels ↑</a>
+                    {% endif %}
+                </th>
+                <th>
+                    {% if request.GET.sort_order == "asc" %}
+                        <a href="?sort_by=value&sort_order=desc">Value ↓</a>
+                    {% else %}
+                        <a href="?sort_by=value&sort_order=asc">Value ↑</a>
+                    {% endif %}
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -43,6 +120,37 @@
 {% endblock %}
 
 {% endif %}
+<script>
+    document.querySelector("#exportButton").addEventListener("click", function() {
+        // Fetch the CSV data from the server
+        fetch("{% url 'myapp:csv_export' data_section=data %}")
+            .then(response => response.blob())
+            .then(data => {
+                // Create a blob from the data
+                const csv = "iteration, CPU Time, Travels, Value\n" + data.map(row => row.join(", ")).join("\n");
+
+                // Create a blob from the CSV data
+                const blob = new Blob([csv], { type: "text/csv" });
+
+                // Create a URL for the blob
+                const url = URL.createObjectURL(blob);
+
+                // Create an anchor element for the user to download the file
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "exported_data.csv";
+
+                // Simulate a click on the anchor element to trigger the download prompt
+                a.click();
+
+                // Release the object URL
+                URL.revokeObjectURL(url);
+
+            });
+    });
+</script>
+
+
 
 
 
