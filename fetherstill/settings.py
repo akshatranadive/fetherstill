@@ -32,7 +32,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'myapp',
-    'tempus_dominus',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -79,8 +78,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'fetherstill',
-        'USER': 'postgres',
-        'PASSWORD': '123',
+        'USER': 'tester',
+        'PASSWORD': 'test123',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
@@ -131,3 +130,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'myapp:login_view'
 LOGIN_REDIRECT_URL = 'myapp:common_section'
 LOGOUT_REDIRECT_URL = 'myapp:login_view'
+
+MEDIA_ROOT = './myapp/media/'
+
+MEDIA_URL = '/media/'

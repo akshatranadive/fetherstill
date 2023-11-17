@@ -1,19 +1,14 @@
-from datetime import datetime
-
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import FileSystemStorage
+
 from .models import Pump, Inflow, Outflow
 from .forms import *
 import pandas as pd
-from django.forms import DateTimeInput
-import json
 
-import csv
-from django.http import HttpResponse, JsonResponse
-import tempfile
-import os
 
 @login_required(login_url="myapp:login_view")
 def common_section(request, data_section):
@@ -162,46 +157,6 @@ def common_section(request, data_section):
         })
 
 
-
-    # form = DataFilterForm(request.POST or None)  # Initialize the form with POST data or None
-    #
-    # if form.is_valid():
-    #     start_date = form.cleaned_data.get('start_date')
-    #     end_date = form.cleaned_data.get('end_date')
-    #     start_iteration = form.cleaned_data.get('start_iteration')
-    #     end_iteration = form.cleaned_data.get('end_iteration')
-    #
-    #     # Prepare filters based on the provided values
-    #     filters = {}
-    #
-    #     # if start_date:
-    #     #     filters['datetime__gte'] = start_date
-    #     # if end_date:
-    #     #     filters['datetime__lte'] = end_date
-    #     if start_iteration:
-    #         filters['iteration__gte'] = start_iteration
-    #     if end_iteration:
-    #         filters['iteration__lte'] = end_iteration
-    #
-    #     # Apply filters to the data
-    #     if data_section == 'pump':
-    #         data = Pump.objects.filter(**filters).order_by(order_field)
-    #     elif data_section == 'inlet':
-    #         data = Inflow.objects.filter(**filters).order_by(order_field)
-    #     elif data_section == 'outlet':
-    #         data = Outflow.objects.filter(**filters).order_by(order_field)
-    # else:
-    #     # No form submission or form is not valid, so display all data
-    #     if data_section == 'pump':
-    #         data = Pump.objects.all()
-    #     elif data_section == 'inlet':
-    #         data = Inflow.objects.all()
-    #     elif data_section == 'outlet':
-    #         data = Outflow.objects.all()
-    #
-    # return render(request, 'section.html', {'data': data, 'data_section': data_section, 'form': form})
-
-
 def export_to_csv(request, data_section):
     data = get_filtered_data(request, data_section)
     response = HttpResponse(content_type='text/csv')
@@ -218,6 +173,7 @@ def export_to_csv(request, data_section):
     df.to_csv(response, index=False)
 
     return response
+
 
 def export_to_excel(request, data_section):
     data = get_filtered_data(request, data_section)
@@ -236,6 +192,7 @@ def export_to_excel(request, data_section):
 
     return response
 
+
 def export_to_json(request, data_section):
     data = get_filtered_data(request, data_section)
     response = HttpResponse(content_type='application/json')
@@ -252,6 +209,7 @@ def export_to_json(request, data_section):
     response.write(df.to_json(orient='records', indent=2))
 
     return response
+
 
 def get_filtered_data(request, data_section):
     iteration_form = IterationFilterForm(request.GET)
@@ -302,6 +260,7 @@ def get_filtered_data(request, data_section):
 
     return filtered_data
 
+
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -322,26 +281,13 @@ def login_view(request):
 def home_view(request):
     return render(request, 'home.html')
 
-    # response = HttpResponse(content_type='text/csv')
-    # response['Content-Disposition'] = f'attachment; filename="{data_section}_data.csv"'
-    #
-    # writer = csv.writer(response)
-    #
-    # # Write headers to the CSV file
-    # writer.writerow(["iteration", "CPU Time", "Travels", "Value"])  # Adjust column headers as needed
-    #
-    # # Write data rows to the CSV file
-    # for item in data:
-    #     writer.writerow([item.iteration, item.cputime, item.travels, item.value])
-    #
-    # return response
 
-    # data_list = [["iteration", "CPU Time", "Travels", "Value"]]  # Headers
-    # data_list.extend([[item.iteration, item.cputime, item.travels, item.value] for item in data])
-    #
-    # return JsonResponse(data_list, safe=False)
-
-
-
-
-
+@login_required(login_url="myapp:login_view")
+def upload_view(request):
+    context = {}
+    if request.method == 'POST':
+        uploaded_file = request.FILES['file']
+        fs = FileSystemStorage()
+        name = fs.save(uploaded_file.name, uploaded_file)
+        context['name'] = name
+    return render(request, "upload.html", context)

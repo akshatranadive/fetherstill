@@ -12,6 +12,9 @@
         <link rel="stylesheet" type="text/css" href="{% static 'myapp/base.css' %}">
 
     <style>
+        body {
+            background-color: #EEEEFF;
+        }
         /* Sidebar Styles */
         #sidebar {
             background-color: #343a40;
@@ -23,20 +26,20 @@
             color: #ffffff;
             font-size: 16px;
         }
-#sidebar .nav-link ul {
-    list-style: none !important;
-    padding: 0;
-    margin: 0;
-}
 
+        #sidebar .nav-link ul {
+            list-style: none !important;
+            padding: 0;
+            margin: 0;
+        }
 
         .nav-link:hover {
             background-color: #555d66;
         }
 
         /* Custom class for the "Battery" heading */
-        .battery-heading {
-            font-size: 24px;
+        .battery-heading, .upload-heading {
+            font-size: 20px;
         }
 
         /* Collapse arrow color */
@@ -60,20 +63,13 @@
             <nav id="sidebar" class="col-md-2">
                 <div class="position-sticky">
 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-            <img src="{% static 'myapp/assets/test.png' %}" width="100" height="100"
-                class="d-inline-block align-items-center" alt="">
-
+            <img src="{% static 'myapp/assets/test.png' %}" width="100" height="100" class="d-inline-block align-items-center" alt="">
                     <ul class="nav flex-column">
                         <li class="nav-item">
                             <a class="nav-link battery-heading" href="#batterySubmenu" data-bs-toggle="collapse" aria-expanded="false">
-                                Battery
+                                Battery Module
                             </a>
                             <ul class="nav flex-column collapse" id="batterySubmenu">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'myapp:common_section' data_section='pump' %}">
-                                        Pump
-                                    </a>
-                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="{% url 'myapp:common_section' data_section='inlet' %}">
                                         Inlet
@@ -84,7 +80,15 @@
                                         Outlet
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'myapp:common_section' data_section='pump' %}">
+                                        Pump
+                                    </a>
+                                </li>
                             </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link upload-heading" href="{% url 'myapp:upload' %}">Upload</a>
                         </li>
                     </ul>
                 </div>
