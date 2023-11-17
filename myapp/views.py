@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -5,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Pump, Inflow, Outflow
 from .forms import *
 import pandas as pd
+from django.forms import DateTimeInput
 import json
 
 import csv
@@ -14,62 +17,84 @@ import os
 
 @login_required(login_url="myapp:login_view")
 def common_section(request, data_section):
+    date_format = '%b. %d, %Y, %I:%M %p'
+
     if data_section == 'pump':
+        data = Pump.objects.all()
+
         watts_form = WattsFilterForm(request.GET)
         volts_form = VoltsFilterForm(request.GET)
-        amperes_form = AmperesFilterForm(request.GET)
+        amp_form = AmperesFilterForm(request.GET)
+        flow_form = FlowFilterForm(request.GET)
         temp_form = TempFilterForm(request.GET)
+        rate_form = RateFilterForm(request.GET)
+        date_form = DateFilterForm(request.GET)
 
-        # Sorting logic
-        sort_by = request.GET.get('sort_by', 'w')  # Default to 'iteration' if no column is specified
-        sort_order = request.GET.get('sort_order', 'asc')  # Sort order: 'asc' or 'desc'
+        # Process and apply the filters based on the form data
 
-        order_field = sort_by
-        if sort_order == 'desc':
-            order_field = '-' + order_field
+        filtered_data = data
 
-        data = Pump.objects.all()
-        
         if watts_form.is_valid():
             min_w = watts_form.cleaned_data.get('min_w')
             max_w = watts_form.cleaned_data.get('max_w')
+            print(min_w)
             if min_w is not None:
-                data = data.filter(w__gte=min_w)
+                filtered_data = filtered_data.filter(w__gte=min_w)
             if max_w is not None:
-                data = data.filter(w__lte=max_w)
-
+                filtered_data = filtered_data.filter(w__lte=max_w)
         if volts_form.is_valid():
             min_v = volts_form.cleaned_data.get('min_v')
             max_v = volts_form.cleaned_data.get('max_v')
             if min_v is not None:
-                data = data.filter(v__gte=min_v)
+                filtered_data = filtered_data.filter(v__gte=min_v)
             if max_v is not None:
-                data = data.filter(v__lte=max_v)
-
-        if amperes_form.is_valid():
-            min_a = amperes_form.cleaned_data.get('min_a')
-            max_a = amperes_form.cleaned_data.get('max_a')
+                filtered_data = filtered_data.filter(v__lte=max_v)
+        if amp_form.is_valid():
+            min_a = amp_form.cleaned_data.get('min_a')
+            max_a = amp_form.cleaned_data.get('max_a')
             if min_a is not None:
-                data = data.filter(a__gte=min_a)
+                filtered_data = filtered_data.filter(a__gte=min_a)
             if max_a is not None:
-                data = data.filter(a__lte=max_a)
-
+                filtered_data = filtered_data.filter(a__lte=max_a)
+        if flow_form.is_valid():
+            min_flow = flow_form.cleaned_data.get('min_flow')
+            max_flow = flow_form.cleaned_data.get('max_flow')
+            if min_flow is not None:
+                filtered_data = filtered_data.filter(flow_l_min__gte=min_flow)
+            if max_flow is not None:
+                filtered_data = filtered_data.filter(flow_l_min__lte=max_flow)
         if temp_form.is_valid():
             min_temp = temp_form.cleaned_data.get('min_temp')
             max_temp = temp_form.cleaned_data.get('max_temp')
             if min_temp is not None:
-                data = data.filter(temp__gte=min_temp)
+                filtered_data = filtered_data.filter(temp_field__gte=min_temp)
             if max_temp is not None:
-                data = data.filter(temp__lte=max_temp)
-
-        sorted_data = data.order_by(order_field)
+                filtered_data = filtered_data.filter(temp_field__lte=max_temp)
+        if rate_form.is_valid():
+            min_rate = rate_form.cleaned_data.get('min_rate')
+            max_rate = rate_form.cleaned_data.get('max_rate')
+            if min_rate is not None:
+                filtered_data = filtered_data.filter(r_sec__gte=min_rate)
+            if max_rate is not None:
+                filtered_data = filtered_data.filter(r_sec__lte=max_rate)
+        if date_form.is_valid():
+            min_date = date_form.cleaned_data.get('min_date')
+            max_date = date_form.cleaned_data.get('max_date')
+            if min_date is not None:
+                filtered_data = filtered_data.filter(datetime__gte=min_date)
+            if max_date is not None:
+                filtered_data = filtered_data.filter(datetime__lte=max_date)
 
         return render(request, 'section.html', {
-            'data': data,  # Pass sorted data to the template
+            'data': filtered_data,
             'watts_form': watts_form,
             'volts_form': volts_form,
-            'amperes_form': amperes_form,
+            'amp_form': amp_form,
+            'flow_form': flow_form,
             'temp_form': temp_form,
+            'rate_form': rate_form,
+            'date_form': date_form,
+            'data_section': data_section,
         })
     
     else:

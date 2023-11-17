@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Pump data</title>
+
     <style>
         .form-row:first-child .form-group:nth-child(3) {
             margin-left: 200px;
@@ -13,8 +14,10 @@
     </style>
 </head>
 <body>
+    <h2 class="fw-bold">Pump Data</h2>
+    <br>
 
-<!-- <form method="get" action="{% url 'myapp:common_section' data_section=data_section %}" novalidate>
+<form method="get" action="{% url 'myapp:common_section' data_section=data_section %}" novalidate>
     <div class="form-row">
         <div class="form-group col-md-2">
             {{ watts_form.min_w.label_tag }}
@@ -33,16 +36,34 @@
             {{ volts_form.max_v }}
         </div>
     </div>
-
     <div class="form-row">
         <div class="form-group col-md-2">
-            {{ amperes_form.min_a.label_tag }}
-            {{ amperes_form.min_a }}
+            {{ amp_form.min_a.label_tag }}
+            {{ amp_form.min_a }}
         </div>
         <div class="form-group col-md-2">
-            {{ amperes_form.max_a.label_tag }}
-            {{ amperes_form.max_a }}
+            {{ amp_form.max_a.label_tag }}
+            {{ amp_form.max_a }}
         </div>
+        <div class="form-group col-md-2">
+            {{ flow_form.min_flow.label_tag }}
+            {{ flow_form.min_flow }}
+        </div>
+        <div class="form-group col-md-2">
+            {{ flow_form.max_flow.label_tag }}
+            {{ flow_form.max_flow }}
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            {{ rate_form.min_rate.label_tag }}
+            {{ rate_form.min_rate }}
+        </div>
+        <div class="form-group col-md-2">
+            {{ rate_form.max_rate.label_tag }}
+            {{ rate_form.max_rate }}
+        </div>
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
         <div class="form-group col-md-2">
             {{ temp_form.min_temp.label_tag }}
             {{ temp_form.min_temp }}
@@ -52,33 +73,36 @@
             {{ temp_form.max_temp }}
         </div>
     </div>
+    <div class="form-row">
+            <div class="form-group col-md-2">
+                {{ date_form.min_date.label_tag }}
+                {{ date_form.min_date }}
+            </div>
+            <div class="form-group col-md-2">
+                {{ date_form.max_date.label_tag }}
+                {{ date_form.max_date }}
+            </div>
+        </div>
 
     <button type="submit" class="btn btn-primary">Apply Filters</button>
 </form>
 
 
-{#<form method="post" action="{% url 'myapp:common_section' data_section=data_section %}">#}
-{#    {% csrf_token %}#}
-{#    {{ form.as_table }}#}
-{#    <button type="submit">Filter Data</button>#}
-{#</form>#}
-
+<!-- inlet_data.html -->
 {% if data %}
 
-<div class="export-dropdown">
-    <button id="exportButton" type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Export <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="exportButton">
-        <li><a href="{% url 'myapp:csv_export' data_section=data_section %}?export_format=csv">CSV</a></li>
-        <li><a href="{% url 'myapp:excel_export' data_section=data_section %}?export_format=excel">Excel</a></li>
-        <li><a href="{% url 'myapp:json_export' data_section=data_section %}?export_format=json">JSON</a></li>
-    </ul>
-</div> -->
-
+{#<div class="export-dropdown">#}
+{#    <button id="exportButton" type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
+{#        Export <span class="caret"></span>#}
+{#    </button>#}
+{#    <ul class="dropdown-menu" aria-labelledby="exportButton">#}
+{#        <li><a href="{% url 'myapp:csv_export' data_section=data_section %}?export_format=csv">CSV</a></li>#}
+{#        <li><a href="{% url 'myapp:excel_export' data_section=data_section %}?export_format=excel">Excel</a></li>#}
+{#        <li><a href="{% url 'myapp:json_export' data_section=data_section %}?export_format=json">JSON</a></li>#}
+{#    </ul>#}
+{#</div>#}
 {% block content %}
-    <!-- Content for the Pump section -->
-    <h2>Pump Data</h2>
+    <!-- Content for the Inlet section -->
     <table class="table">
         <thead>
             <tr>
@@ -88,6 +112,7 @@
                 <th scope="col">Flow</th>
                 <th scope="col">Rate/sec</th>
                 <th scope="col">Temperature</th>
+                <th scope="col">Datetime</th>
                 <!-- Add other columns specific to Inlet data as needed -->
             </tr>
         </thead>
@@ -100,12 +125,14 @@
                 <td>{{ item.flow_l_min }}</td>
                 <td>{{ item.r_sec }}</td>
                 <td>{{ item.temp_field }}</td>
+                <td>{{ item.datetime }}</td>
                 <!-- Display other fields specific to Inlet data as needed -->
             </tr>
             {% endfor %}
         </tbody>
     </table>
 {% endblock %}
+{% endif %}
 
 
 </body>

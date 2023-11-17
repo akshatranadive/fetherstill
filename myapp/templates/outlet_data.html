@@ -20,6 +20,8 @@
 {#    <button type="submit">Filter Data</button>#}
 {#</form>#}
 
+    <h2 class="fw-bold">Outlet Data</h2>
+    <br>
 
 
 <form method="get" action="{% url 'myapp:common_section' data_section=data_section %}" novalidate>
@@ -80,7 +82,6 @@
 
 {% block content %}
     <!-- Content for the Inlet section -->
-    <h2>Outlet Data</h2>
     <table class="table">
         <thead>
             <tr>
