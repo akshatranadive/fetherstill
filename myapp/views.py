@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
@@ -147,8 +148,22 @@ def common_section(request, data_section):
         # Apply sorting to the filtered data
         sorted_data = data.order_by(order_field)
 
+        items_per_page = 20
+
+        paginator = Paginator(sorted_data, items_per_page)
+        page = request.GET.get('page')
+
+        try:
+            pagi_data = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            pagi_data = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g., 9999), deliver last page.
+            pagi_data = paginator.page(paginator.num_pages)
+
         return render(request, 'section.html', {
-            'data': sorted_data,  # Pass sorted data to the template
+            'data': pagi_data,  # Pass sorted data to the template
             'iteration_form': iteration_form,
             'cpu_time_form': cpu_time_form,
             'travels_form': travels_form,

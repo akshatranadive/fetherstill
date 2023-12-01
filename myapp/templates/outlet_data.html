@@ -74,9 +74,9 @@
         Export <span class="caret"></span>
     </button>
     <ul class="dropdown-menu" aria-labelledby="exportButton">
-        <li><a href="{% url 'myapp:csv_export' data_section=data_section %}?export_format=csv">CSV</a></li>
-        <li><a href="{% url 'myapp:excel_export' data_section=data_section %}?export_format=excel">Excel</a></li>
-        <li><a href="{% url 'myapp:json_export' data_section=data_section %}?export_format=json">JSON</a></li>
+        <li><a class="mx-3" href="{% url 'myapp:csv_export' data_section=data_section %}?export_format=csv">CSV</a></li>
+        <li><a class="mx-3" href="{% url 'myapp:excel_export' data_section=data_section %}?export_format=excel">Excel</a></li>
+        <li><a class="mx-3" href="{% url 'myapp:json_export' data_section=data_section %}?export_format=json">JSON</a></li>
     </ul>
 </div>
 
