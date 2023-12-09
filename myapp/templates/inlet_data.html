@@ -75,13 +75,6 @@
 </form>
 
 
-{#<form method="post" action="{% url 'myapp:common_section' data_section=data_section %}">#}
-{#    {% csrf_token %}#}
-{#    {{ form.as_table }}#}
-{#    <button type="submit">Filter Data</button>#}
-{#</form>#}
-
-<!-- inlet_data.html -->
 {% if data %}
 
 <div class="export-dropdown">
@@ -89,9 +82,9 @@
         Export <span class="caret"></span>
     </button>
     <ul class="dropdown-menu" aria-labelledby="exportButton">
-        <li><a class="mx-3" href="{% url 'myapp:csv_export' data_section=data_section %}?export_format=csv">CSV</a></li>
-        <li><a class="mx-3" href="{% url 'myapp:excel_export' data_section=data_section %}?export_format=excel">Excel</a></li>
-        <li><a class="mx-3" href="{% url 'myapp:json_export' data_section=data_section %}?export_format=json">JSON</a></li>
+        <li><a class="mx-3" href="{% url 'myapp:csv_export' data_section=data_section %}?export_format=csv{% if request.GET.min_iteration %}&min_iteration={{ request.GET.min_iteration }}{% endif %}{% if request.GET.max_iteration %}&max_iteration={{ request.GET.max_iteration }}{% endif %}{% if request.GET.min_cputime %}&min_cputime={{ request.GET.min_cputime }}{% endif %}{% if request.GET.max_cputime %}&max_cputime={{ request.GET.max_cputime }}{% endif %}{% if request.GET.min_travels %}&min_travels={{ request.GET.min_travels }}{% endif %}{% if request.GET.max_travels %}&max_travels={{ request.GET.max_travels }}{% endif %}{% if request.GET.min_value %}&min_value={{ request.GET.min_value }}{% endif %}{% if request.GET.max_value %}&max_value={{ request.GET.max_value }}{% endif %}">CSV</a></li>
+        <li><a class="mx-3" href="{% url 'myapp:excel_export' data_section=data_section %}?export_format=excel{% if request.GET.min_iteration %}&min_iteration={{ request.GET.min_iteration }}{% endif %}{% if request.GET.max_iteration %}&max_iteration={{ request.GET.max_iteration }}{% endif %}{% if request.GET.min_cputime %}&min_cputime={{ request.GET.min_cputime }}{% endif %}{% if request.GET.max_cputime %}&max_cputime={{ request.GET.max_cputime }}{% endif %}{% if request.GET.min_travels %}&min_travels={{ request.GET.min_travels }}{% endif %}{% if request.GET.max_travels %}&max_travels={{ request.GET.max_travels }}{% endif %}{% if request.GET.min_value %}&min_value={{ request.GET.min_value }}{% endif %}{% if request.GET.max_value %}&max_value={{ request.GET.max_value }}{% endif %}">Excel</a></li>
+        <li><a class="mx-3" href="{% url 'myapp:json_export' data_section=data_section %}?export_format=json{% if request.GET.min_iteration %}&min_iteration={{ request.GET.min_iteration }}{% endif %}{% if request.GET.max_iteration %}&max_iteration={{ request.GET.max_iteration }}{% endif %}{% if request.GET.min_cputime %}&min_cputime={{ request.GET.min_cputime }}{% endif %}{% if request.GET.max_cputime %}&max_cputime={{ request.GET.max_cputime }}{% endif %}{% if request.GET.min_travels %}&min_travels={{ request.GET.min_travels }}{% endif %}{% if request.GET.max_travels %}&max_travels={{ request.GET.max_travels }}{% endif %}{% if request.GET.min_value %}&min_value={{ request.GET.min_value }}{% endif %}{% if request.GET.max_value %}&max_value={{ request.GET.max_value }}{% endif %}">JSON</a></li>
     </ul>
 </div>
 
@@ -101,32 +94,39 @@
         <thead>
             <tr>
                 <th>
-                    {% if request.GET.sort_order == "asc" %}
-                        <a href="?sort_by=iteration&sort_order=desc">Iterations ↓</a>
+                    {% if sort_order == "asc" %}
+                        <a class="text-decoration-none" href="?sort_by=iteration&sort_order=desc{% if request.GET.min_iteration %}&min_iteration={{ request.GET.min_iteration }}{% endif %}{% if request.GET.max_iteration %}&max_iteration={{ request.GET.max_iteration }}{% endif %}{% if request.GET.min_cputime %}&min_cputime={{ request.GET.min_cputime }}{% endif %}{% if request.GET.max_cputime %}&max_cputime={{ request.GET.max_cputime }}{% endif %}{% if request.GET.min_travels %}&min_travels={{ request.GET.min_travels }}{% endif %}{% if request.GET.max_travels %}&max_travels={{ request.GET.max_travels }}{% endif %}{% if request.GET.min_value %}&min_value={{ request.GET.min_value }}{% endif %}{% if request.GET.max_value %}&max_value={{ request.GET.max_value }}{% endif %}">
+                            Iterations ↑</a>
                     {% else %}
-                        <a href="?sort_by=iteration&sort_order=asc">Iterations ↑</a>
-                    {% endif %}
-                </th>
-                <!-- Add similar blocks for other columns -->
-                <th>
-                    {% if request.GET.sort_order == "asc" %}
-                        <a href="?sort_by=cputime&sort_order=desc">CPU Time ↓</a>
-                    {% else %}
-                        <a href="?sort_by=cputime&sort_order=asc">CPU Time ↑</a>
+                        <a class="text-decoration-none" href="?sort_by=iteration&sort_order=asc{% if request.GET.min_iteration %}&min_iteration={{ request.GET.min_iteration }}{% endif %}{% if request.GET.max_iteration %}&max_iteration={{ request.GET.max_iteration }}{% endif %}{% if request.GET.min_cputime %}&min_cputime={{ request.GET.min_cputime }}{% endif %}{% if request.GET.max_cputime %}&max_cputime={{ request.GET.max_cputime }}{% endif %}{% if request.GET.min_travels %}&min_travels={{ request.GET.min_travels }}{% endif %}{% if request.GET.max_travels %}&max_travels={{ request.GET.max_travels }}{% endif %}{% if request.GET.min_value %}&min_value={{ request.GET.min_value }}{% endif %}{% if request.GET.max_value %}&max_value={{ request.GET.max_value }}{% endif %}">
+                            Iterations ↓</a>
                     {% endif %}
                 </th>
                 <th>
                     {% if request.GET.sort_order == "asc" %}
-                        <a href="?sort_by=travels&sort_order=desc">Travels ↓</a>
+                        <a href="?sort_by=cputime&sort_order=desc{% if request.GET.min_iteration %}&min_iteration={{ request.GET.min_iteration }}{% endif %}{% if request.GET.max_iteration %}&max_iteration={{ request.GET.max_iteration }}{% endif %}{% if request.GET.min_cputime %}&min_cputime={{ request.GET.min_cputime }}{% endif %}{% if request.GET.max_cputime %}&max_cputime={{ request.GET.max_cputime }}{% endif %}{% if request.GET.min_travels %}&min_travels={{ request.GET.min_travels }}{% endif %}{% if request.GET.max_travels %}&max_travels={{ request.GET.max_travels }}{% endif %}{% if request.GET.min_value %}&min_value={{ request.GET.min_value }}{% endif %}{% if request.GET.max_value %}&max_value={{ request.GET.max_value }}{% endif %}">
+                            CPU Time ↑</a>
                     {% else %}
-                        <a href="?sort_by=travels&sort_order=asc">Travels ↑</a>
+                        <a href="?sort_by=cputime&sort_order=asc{% if request.GET.min_iteration %}&min_iteration={{ request.GET.min_iteration }}{% endif %}{% if request.GET.max_iteration %}&max_iteration={{ request.GET.max_iteration }}{% endif %}{% if request.GET.min_cputime %}&min_cputime={{ request.GET.min_cputime }}{% endif %}{% if request.GET.max_cputime %}&max_cputime={{ request.GET.max_cputime }}{% endif %}{% if request.GET.min_travels %}&min_travels={{ request.GET.min_travels }}{% endif %}{% if request.GET.max_travels %}&max_travels={{ request.GET.max_travels }}{% endif %}{% if request.GET.min_value %}&min_value={{ request.GET.min_value }}{% endif %}{% if request.GET.max_value %}&max_value={{ request.GET.max_value }}{% endif %}">
+                            CPU Time ↓</a>
                     {% endif %}
                 </th>
                 <th>
                     {% if request.GET.sort_order == "asc" %}
-                        <a href="?sort_by=value&sort_order=desc">Value ↓</a>
+                        <a href="?sort_by=travels&sort_order=desc{% if request.GET.min_iteration %}&min_iteration={{ request.GET.min_iteration }}{% endif %}{% if request.GET.max_iteration %}&max_iteration={{ request.GET.max_iteration }}{% endif %}{% if request.GET.min_cputime %}&min_cputime={{ request.GET.min_cputime }}{% endif %}{% if request.GET.max_cputime %}&max_cputime={{ request.GET.max_cputime }}{% endif %}{% if request.GET.min_travels %}&min_travels={{ request.GET.min_travels }}{% endif %}{% if request.GET.max_travels %}&max_travels={{ request.GET.max_travels }}{% endif %}{% if request.GET.min_value %}&min_value={{ request.GET.min_value }}{% endif %}{% if request.GET.max_value %}&max_value={{ request.GET.max_value }}{% endif %}">
+                            Travels ↑</a>
                     {% else %}
-                        <a href="?sort_by=value&sort_order=asc">Value ↑</a>
+                        <a href="?sort_by=travels&sort_order=asc{% if request.GET.min_iteration %}&min_iteration={{ request.GET.min_iteration }}{% endif %}{% if request.GET.max_iteration %}&max_iteration={{ request.GET.max_iteration }}{% endif %}{% if request.GET.min_cputime %}&min_cputime={{ request.GET.min_cputime }}{% endif %}{% if request.GET.max_cputime %}&max_cputime={{ request.GET.max_cputime }}{% endif %}{% if request.GET.min_travels %}&min_travels={{ request.GET.min_travels }}{% endif %}{% if request.GET.max_travels %}&max_travels={{ request.GET.max_travels }}{% endif %}{% if request.GET.min_value %}&min_value={{ request.GET.min_value }}{% endif %}{% if request.GET.max_value %}&max_value={{ request.GET.max_value }}{% endif %}">
+                            Travels ↓</a>
+                    {% endif %}
+                </th>
+                <th>
+                    {% if request.GET.sort_order == "asc" %}
+                        <a href="?sort_by=value&sort_order=desc{% if request.GET.min_iteration %}&min_iteration={{ request.GET.min_iteration }}{% endif %}{% if request.GET.max_iteration %}&max_iteration={{ request.GET.max_iteration }}{% endif %}{% if request.GET.min_cputime %}&min_cputime={{ request.GET.min_cputime }}{% endif %}{% if request.GET.max_cputime %}&max_cputime={{ request.GET.max_cputime }}{% endif %}{% if request.GET.min_travels %}&min_travels={{ request.GET.min_travels }}{% endif %}{% if request.GET.max_travels %}&max_travels={{ request.GET.max_travels }}{% endif %}{% if request.GET.min_value %}&min_value={{ request.GET.min_value }}{% endif %}{% if request.GET.max_value %}&max_value={{ request.GET.max_value }}{% endif %}">
+                            Value ↑</a>
+                    {% else %}
+                        <a href="?sort_by=value&sort_order=asc{% if request.GET.min_iteration %}&min_iteration={{ request.GET.min_iteration }}{% endif %}{% if request.GET.max_iteration %}&max_iteration={{ request.GET.max_iteration }}{% endif %}{% if request.GET.min_cputime %}&min_cputime={{ request.GET.min_cputime }}{% endif %}{% if request.GET.max_cputime %}&max_cputime={{ request.GET.max_cputime }}{% endif %}{% if request.GET.min_travels %}&min_travels={{ request.GET.min_travels }}{% endif %}{% if request.GET.max_travels %}&max_travels={{ request.GET.max_travels }}{% endif %}{% if request.GET.min_value %}&min_value={{ request.GET.min_value }}{% endif %}{% if request.GET.max_value %}&max_value={{ request.GET.max_value }}{% endif %}">
+                            Value ↓</a>
                     {% endif %}
                 </th>
             </tr>
@@ -148,12 +148,12 @@
     <ul class="pagination nav nav-tabs">
         {% if data.has_previous %}
             <li class="page-item nav-item">
-                <a class="page-link nav-link" href="?page=1" aria-label="First">
+                <a class="page-link nav-link" href="?page=1{% if request.GET.min_iteration %}&min_iteration={{ request.GET.min_iteration }}{% endif %}{% if request.GET.max_iteration %}&max_iteration={{ request.GET.max_iteration }}{% endif %}{% if request.GET.min_cputime %}&min_cputime={{ request.GET.min_cputime }}{% endif %}{% if request.GET.max_cputime %}&max_cputime={{ request.GET.max_cputime }}{% endif %}{% if request.GET.min_travels %}&min_travels={{ request.GET.min_travels }}{% endif %}{% if request.GET.max_travels %}&max_travels={{ request.GET.max_travels }}{% endif %}{% if request.GET.min_value %}&min_value={{ request.GET.min_value }}{% endif %}{% if request.GET.max_value %}&max_value={{ request.GET.max_value }}{% endif %}" aria-label="First">
                     <span aria-hidden="true">&laquo;&laquo;</span>
                 </a>
             </li>
             <li class="page-item nav-item">
-                <a class="page-link nav-link" href="?page={{ data.previous_page_number }}" aria-label="Previous">
+                <a class="page-link nav-link" href="?page={{ data.previous_page_number }}{% if request.GET.min_iteration %}&min_iteration={{ request.GET.min_iteration }}{% endif %}{% if request.GET.max_iteration %}&max_iteration={{ request.GET.max_iteration }}{% endif %}{% if request.GET.min_cputime %}&min_cputime={{ request.GET.min_cputime }}{% endif %}{% if request.GET.max_cputime %}&max_cputime={{ request.GET.max_cputime }}{% endif %}{% if request.GET.min_travels %}&min_travels={{ request.GET.min_travels }}{% endif %}{% if request.GET.max_travels %}&max_travels={{ request.GET.max_travels }}{% endif %}{% if request.GET.min_value %}&min_value={{ request.GET.min_value }}{% endif %}{% if request.GET.max_value %}&max_value={{ request.GET.max_value }}{% endif %}" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
@@ -161,18 +161,18 @@
 
         {% for page_num in data.paginator.page_range %}
             <li class="page-item nav-item {% if page_num == data.number %}active{% endif %}">
-                <a class="page-link nav-link" href="?page={{ page_num }}">{{ page_num }}</a>
+                <a class="page-link nav-link" href="?page={{ page_num }}{% if request.GET.min_iteration %}&min_iteration={{ request.GET.min_iteration }}{% endif %}{% if request.GET.max_iteration %}&max_iteration={{ request.GET.max_iteration }}{% endif %}{% if request.GET.min_cputime %}&min_cputime={{ request.GET.min_cputime }}{% endif %}{% if request.GET.max_cputime %}&max_cputime={{ request.GET.max_cputime }}{% endif %}{% if request.GET.min_travels %}&min_travels={{ request.GET.min_travels }}{% endif %}{% if request.GET.max_travels %}&max_travels={{ request.GET.max_travels }}{% endif %}{% if request.GET.min_value %}&min_value={{ request.GET.min_value }}{% endif %}{% if request.GET.max_value %}&max_value={{ request.GET.max_value }}{% endif %}">{{ page_num }}</a>
             </li>
         {% endfor %}
 
         {% if data.has_next %}
             <li class="page-item nav-item">
-                <a class="page-link nav-link" href="?page={{ data.next_page_number }}" aria-label="Next">
+                <a class="page-link nav-link" href="?page={{ data.next_page_number }}{% if request.GET.min_iteration %}&min_iteration={{ request.GET.min_iteration }}{% endif %}{% if request.GET.max_iteration %}&max_iteration={{ request.GET.max_iteration }}{% endif %}{% if request.GET.min_cputime %}&min_cputime={{ request.GET.min_cputime }}{% endif %}{% if request.GET.max_cputime %}&max_cputime={{ request.GET.max_cputime }}{% endif %}{% if request.GET.min_travels %}&min_travels={{ request.GET.min_travels }}{% endif %}{% if request.GET.max_travels %}&max_travels={{ request.GET.max_travels }}{% endif %}{% if request.GET.min_value %}&min_value={{ request.GET.min_value }}{% endif %}{% if request.GET.max_value %}&max_value={{ request.GET.max_value }}{% endif %}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
             <li class="page-item nav-item">
-                <a class="page-link nav-link" href="?page={{ data.paginator.num_pages }}" aria-label="Last">
+                <a class="page-link nav-link" href="?page={{ data.paginator.num_pages }}{% if request.GET.min_iteration %}&min_iteration={{ request.GET.min_iteration }}{% endif %}{% if request.GET.max_iteration %}&max_iteration={{ request.GET.max_iteration }}{% endif %}{% if request.GET.min_cputime %}&min_cputime={{ request.GET.min_cputime }}{% endif %}{% if request.GET.max_cputime %}&max_cputime={{ request.GET.max_cputime }}{% endif %}{% if request.GET.min_travels %}&min_travels={{ request.GET.min_travels }}{% endif %}{% if request.GET.max_travels %}&max_travels={{ request.GET.max_travels }}{% endif %}{% if request.GET.min_value %}&min_value={{ request.GET.min_value }}{% endif %}{% if request.GET.max_value %}&max_value={{ request.GET.max_value }}{% endif %}" aria-label="Last">
                     <span aria-hidden="true">&raquo;&raquo;</span>
                 </a>
             </li>

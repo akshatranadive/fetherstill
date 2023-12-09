@@ -1,0 +1,24 @@
+/*.content-image {*/
+/*    width: 60%; !* Adjust the width as needed *!*/
+/*    height: 100%;*/
+/*    opacity: 0.1; !* 10% opacity *!*/
+/*    align-content: center;*/
+/*    align-items: center;*/
+/*    !* Add any other styles you want for the content image *!*/
+/*}*/
+
+.fether-container {
+    /*display: flex;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
+    /*height: 100vh; !* Adjust the height as needed *!*/
+        text-align: center;
+
+}
+
+.content-image {
+    width: 60%; /* Adjust the width as needed */
+    height: auto;
+    opacity: 0.1; /* 10% opacity */
+    /* Add any other styles you want for the content image */
+}

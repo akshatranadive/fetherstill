@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class BatteryData(models.Model):
@@ -28,7 +29,7 @@ class Outflow(models.Model):
                                              null=True)  # Field name made lowercase.
     criteriapercentage = models.BigIntegerField(db_column='CriteriaPercentage', blank=True,
                                                 null=True)  # Field name made lowercase.
-    datetime = models.DateTimeField(db_column='DateTime', blank=True, null=True)  # Field name made lowercase.
+    date = models.DateField(db_column='Date', blank=True, null=True)  # Field name made lowercase.
     batteryid = models.BigIntegerField(db_column='batteryID', blank=True, null=True)  # Field name made lowercase.
 
     def __str__(self):
@@ -113,7 +114,7 @@ class Inflow(models.Model):
                                              null=True)  # Field name made lowercase.
     criteriapercentage = models.BigIntegerField(db_column='CriteriaPercentage', blank=True,
                                                 null=True)  # Field name made lowercase.
-    datetime = models.DateTimeField(db_column='DateTime', blank=True, null=True)  # Field name made lowercase.
+    date = models.DateField(db_column='Date', blank=True, null=True)  # Field name made lowercase.
     batteryid = models.BigIntegerField(db_column='batteryID', blank=True, null=True)  # Field name made lowercase.
 
     def __str__(self):
@@ -125,8 +126,34 @@ class Pump(models.Model):
     flow_l_min = models.FloatField(db_column='flow', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
     r_sec = models.BigIntegerField(db_column='rPersec', blank=True, null=True)  # Field renamed to remove unsuitable characters.
     temp_field = models.FloatField(db_column='Temp', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters. Field renamed because it ended with '_'.
-    datetime = models.DateTimeField(db_column='DateTime', blank=True, null=True)  # Field name made lowercase.
+    date = models.DateField(db_column='Date', blank=True, null=True)  # Field name made lowercase.
     batteryid = models.BigIntegerField(db_column='batteryID', blank=True, null=True)  # Field name made lowercase.
 
     def __str__(self):
         return self.w
+
+
+class UploadLog(models.Model):
+    UPLOAD_TYPE_CHOICE = [
+        ("New", "New"),
+        ("Edited", "Edited"),
+    ]
+    FILE_CATEGORY_CHOICE = [
+        ("Battery Module", "Battery Module"),
+        ("Simulation", "Simulation"),
+    ]
+    FILE_TYPE_CHOICE = [
+        ("Inlet","Inlet"),
+        ("Outlet","Outlet"),
+        ("Pump","Pump"),
+        ("Type 1","Type 1"),
+        ("Type 2","Type 2"),
+    ]
+    upload_datetime = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
+    file = models.FileField(blank=False)
+    upload_type = models.CharField(choices=UPLOAD_TYPE_CHOICE, blank=False)
+    file_category = models.CharField(choices=FILE_CATEGORY_CHOICE, blank=False)
+    file_type = models.CharField(choices=FILE_TYPE_CHOICE, blank=False)
+    file_date = models.DateField(blank=False)
+    file_name = models.CharField(max_length=64, blank=False)

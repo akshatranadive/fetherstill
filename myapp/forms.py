@@ -51,11 +51,11 @@ class DateFilterForm(forms.Form):
 
     min_date = forms.CharField(
         required=False,
-        widget=forms.TextInput(attrs={'placeholder': 'Enter min date'}),
+        widget=forms.TextInput(),
     )
     max_date = forms.CharField(
         required=False,
-        widget=forms.TextInput(attrs={'placeholder': 'Enter max date'}),
+        widget=forms.TextInput(),
     )
 
     def clean_min_date(self):

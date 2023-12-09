@@ -1,1 +1,9 @@
 {% extends "base.html" %}
+{% block content  %}
+    {% load static %}
+    <div class="fether-container" >
+    <!-- Your actual content goes here -->
+    <img class="content-image" src="{% static 'myapp/assets/test.png' %}" alt="Your Image Description">
+</div>
+
+{% endblock %}
